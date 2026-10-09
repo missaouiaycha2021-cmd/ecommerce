@@ -5,7 +5,7 @@
 FROM node:20 AS build
 
 #créer le dossier de travail /app dans le conteneur Docker, où les commandes suivantes seront exécutées et les fichiers du projet copiés
-WORKDIR /app #
+WORKDIR /app 
 
 #permet de copier les fichiers package.json et package-lock.json depuis ton projet vers le dossier de travail /app pour installer les dépendances car ces deux fichier cotient les bibliothéques et les dépendances de ce projet 
 COPY package*.json ./
