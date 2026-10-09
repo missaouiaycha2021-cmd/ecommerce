@@ -1,0 +1,39 @@
+
+  <div class="adm">
+    <aside class="adm-nav">
+      <a href="#" class="adm-logo">E-shop</a>
+      <p class="adm-sous">Administration</p>
+      <nav aria-label="Administration">
+         <a routerLink="/admin/dashboard" >Tableau de bord</a>
+         <a routerLink="/admin/categories" routerLinkActive="actif" >Catégories</a>
+         <a routerLink="/admin/produits" >Produits</a>
+        <a routerLink="/admin/clients">Clients</a>
+        <a routerLink="/admin/commandes" >Commandes</a>
+      </nav>
+      <a href="connexion.html" class="adm-lien">Se déconnecter</a>
+    </aside>
+
+    <main class="adm-main">
+      <h1>Catégories</h1>
+
+      <form class="adm-ajout">
+        <label for="nouvelle">Nouvelle catégorie</label>
+        <div class="adm-ligne">
+          <input id="nouvelle" placeholder="Ex. Chaussures">
+          <button type="submit" class="adm-btn">Ajouter</button>
+        </div>
+      </form>
+
+      <div class="adm-defile">
+        <table class="adm-table">
+          <thead><tr><th>Nom</th><th>Produits</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>Femme</td><td>3</td><td class="adm-actions"><button type="button" class="adm-lien">Renommer</button><button type="button" class="adm-lien" disabled title="Contient des produits">Supprimer</button></td></tr>
+            <tr><td>Homme</td><td>3</td><td class="adm-actions"><button type="button" class="adm-lien">Renommer</button><button type="button" class="adm-lien" disabled title="Contient des produits">Supprimer</button></td></tr>
+            <tr><td>Enfant</td><td>1</td><td class="adm-actions"><button type="button" class="adm-lien">Renommer</button><button type="button" class="adm-lien" disabled title="Contient des produits">Supprimer</button></td></tr>
+            <tr><td>Accessoires</td><td>1</td><td class="adm-actions"><button type="button" class="adm-lien">Renommer</button><button type="button" class="adm-lien" disabled title="Contient des produits">Supprimer</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>

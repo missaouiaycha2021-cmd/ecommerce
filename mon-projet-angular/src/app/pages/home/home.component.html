@@ -1,0 +1,129 @@
+<div class="annonce">Livraison offerte dès 60 € · Retours gratuits sous 30 jours</div>
+
+<!-- MENU -->
+<header class="header">
+  <a routerLink="/" class="logo">E-shop</a>
+
+  <nav class="menu">
+    <a routerLink="/" routerLinkActive="actif" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    <a routerLink="/about" routerLinkActive="actif">About</a>
+    <a routerLink="/services" routerLinkActive="actif">Services</a>
+    <a routerLink="/blog" routerLinkActive="actif">Blog</a>
+    <a routerLink="/contact" routerLinkActive="actif">Contact</a>
+  </nav>
+
+  <div class="icones">
+    <a href="#" aria-label="Rechercher">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.6"><circle cx="10" cy="10" r="7"/><path d="M15 15l6 6"/></svg>
+    </a>
+    <a href="#" class="compteur" aria-label="Favoris">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.6"><path d="M12 21C5 15 2 11.5 2 8a5 5 0 0 1 10-1 5 5 0 0 1 10 1c0 3.500-3 7-10 13z"/></svg>
+      <span>(05)</span>
+    </a>
+    <a href="#" class="compteur" aria-label="Panier">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.6"><path d="M5 8h14l-1 13H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+      <span>(02) <b>128,00 €</b></span>
+    </a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-texte">
+    <p class="surtitre">Collection 2026</p>
+    <h1>Des vêtements<br>faits pour durer.</h1>
+    <p class="intro">Coupes simples, matières naturelles, couleurs douces.</p>
+    <a href="#collection" class="bouton">Voir la collection</a>
+  </div>
+  <img src="images/hero.jpg" alt="Collection 2026">
+</section>
+
+<!-- COLLECTION : une seule grille -->
+<section class="collection" id="collection">
+  <h2>Toute la collection</h2>
+
+  <!-- catégories : simples liens -->
+  <nav class="categories" aria-label="Catégories">
+    <a routerLink="/shop" class="on">Tous</a>
+    <a routerLink="/shop">Femme</a>
+    <a routerLink="/shop">Homme</a>
+    <a routerLink="/shop">Enfant</a>
+    <a routerLink="/shop">Accessoires</a>
+  </nav>
+
+  <div class="grille">
+
+    <article class="carte">
+      <div class="photo p1"><span class="tag">Nouveau</span></div>
+      <h3>Robe fluide</h3>
+      <p class="prix">59,90 €</p>
+      <button type="button">Ajouter au panier</button>
+    </article>
+
+    <article class="carte">
+      <div class="photo p2"></div>
+      <h3>Chemise en lin</h3>
+      <p class="prix">44,50 €</p>
+      <button type="button">Ajouter au panier</button>
+    </article>
+
+    <article class="carte">
+      <div class="photo p3"><span class="tag rouge">-20 %</span></div>
+      <h3>Manteau long</h3>
+      <p class="prix"><s>179,00 €</s> 139,00 €</p>
+      <button type="button">Ajouter au panier</button>
+    </article>
+
+    <article class="carte">
+      <div class="photo p4"></div>
+      <h3>Jean droit brut</h3>
+      <p class="prix">64,90 €</p>
+      <button type="button">Ajouter au panier</button>
+    </article>
+
+    <article class="carte">
+      <div class="photo p5"><span class="tag">Nouveau</span></div>
+      <h3>Pull en maille</h3>
+      <p class="prix">69,00 €</p>
+      <button type="button">Ajouter au panier</button>
+    </article>
+
+    <article class="carte">
+      <div class="photo p6"></div>
+      <h3>Veste en jean</h3>
+      <p class="prix">84,00 €</p>
+      <button type="button">Ajouter au panier</button>
+    </article>
+
+    <article class="carte">
+      <div class="photo p7"></div>
+      <h3>T-shirt en coton</h3>
+      <p class="prix">24,90 €</p>
+      <button type="button">Ajouter au panier</button>
+    </article>
+
+    <article class="carte">
+      <div class="photo p8"><span class="tag rouge">-30 %</span></div>
+      <h3>Baskets blanches</h3>
+      <p class="prix"><s>113,00 €</s> 79,00 €</p>
+      <button type="button">Ajouter au panier</button>
+    </article>
+
+  </div>
+</section>
+
+<!-- PIED DE PAGE -->
+<footer class="footer">
+  <div class="colonnes">
+    <div><h3>ATELIER 21</h3><p>Mode pour toute la famille, pensée pour durer.</p></div>
+    <div><h4>Aide</h4><a routerLink="/services">Livraison</a><a routerLink="/services">Retours</a><a routerLink="/contact">Nous contacter</a></div>
+    <div>
+      <h4>Newsletter</h4>
+      <form (submit)="$event.preventDefault()">
+        <input type="email" placeholder="Votre e-mail" aria-label="Adresse e-mail" required>
+        <button type="submit">OK</button>
+      </form>
+      <p class="mail">contact&#64;atelier21.example</p>
+    </div>
+  </div>
+  <p class="copyright">© 2026 ATELIER 21. Tous droits réservés.</p>
+</footer>

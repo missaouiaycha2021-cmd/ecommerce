@@ -1,0 +1,53 @@
+
+<body>
+  <div class="adm">
+    <aside class="adm-nav">
+      <a href="#" class="adm-logo">E-shop</a>
+      <p class="adm-sous">Administration</p>
+      <nav aria-label="Administration">
+         <a routerLink="/admin/dashboard" >Tableau de bord</a>
+         <a routerLink="/admin/categories"  >Catégories</a>
+         <a routerLink="/admin/produits" routerLinkActive="actif">Produits</a>
+        <a routerLink="/admin/clients">Clients</a>
+        <a routerLink="/admin/commandes" >Commandes</a>
+      </nav>
+      <a href="connexion.html" class="adm-lien">Se déconnecter</a>
+    </aside>
+
+    <main class="adm-main">
+      <header class="adm-entete">
+        <h1>Produits</h1>
+        <a href="produit-form.html" class="adm-btn">Ajouter un produit</a>
+      </header>
+
+      <div class="adm-filtres">
+        <input type="search" placeholder="Rechercher un produit" aria-label="Rechercher un produit">
+        <select aria-label="Filtrer par catégorie">
+          <option>Toutes les catégories</option><option>Femme</option><option>Homme</option><option>Enfant</option><option>Accessoires</option>
+        </select>
+      </div>
+
+      <div class="adm-defile">
+        <table class="adm-table">
+          <thead><tr><th>Produit</th><th>Catégorie</th><th>Prix</th><th>Stock</th><th>En ligne</th><th></th></tr></thead>
+          <tbody>
+
+  @for (p of produits; track p.id) {
+            <tr>
+               @if (p.tag) {
+                <span class="tag">{{ p.tag }}</span>
+                     }
+              <td>{{ p.nom }}</td><td>{{ p.categorie?.nom }}</td><td>{{ p.prix | currency:'EUR' }}/td><td>{{ p.stock }}</td>
+              <td><input type="checkbox" checked aria-label="Mettre Robe fluide en ligne"></td>
+              <td class="adm-actions"><a href="produit-form.html">Modifier</a><button type="button" class="adm-lien">Supprimer</button></td>
+            </tr>
+            <tr>
+          
+            } @empty {
+  <p>Aucun produit pour le moment.</p>
+}
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>

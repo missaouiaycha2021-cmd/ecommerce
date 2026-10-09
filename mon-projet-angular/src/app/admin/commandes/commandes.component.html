@@ -1,0 +1,31 @@
+
+  <div class="adm">
+    <aside class="adm-nav">
+      <a href="#" class="adm-logo">E-shop</a>
+      <p class="adm-sous">Administration</p>
+      <nav aria-label="Administration">
+         <a routerLink="/admin/dashboard" >Tableau de bord</a>
+         <a routerLink="/admin/categories"  >Catégories</a>
+         <a routerLink="/admin/produits" >Produits</a>
+        <a routerLink="/admin/clients">Clients</a>
+        <a routerLink="/admin/commandes" routerLinkActive="actif">Commandes</a>
+      </nav>
+      <a href="connexion.html" class="adm-lien">Se déconnecter</a>
+    </aside>
+
+
+    <main class="adm-main">
+      <h1>Commandes</h1>
+      <div class="adm-defile">
+        <table class="adm-table">
+          <thead><tr><th>N°</th><th>Date</th><th>Client</th><th>Total</th><th>Statut</th></tr></thead>
+          <tbody>
+            <tr><td>#1042</td><td>02/10/2026</td><td>Camille Durand</td><td>128,00 €</td><td><select aria-label="Statut de la commande 1042"><option selected>En attente</option><option>Expédiée</option><option>Livrée</option><option>Annulée</option></select></td></tr>
+            <tr><td>#1041</td><td>01/10/2026</td><td>Yanis Benali</td><td>44,50 €</td><td><select aria-label="Statut de la commande 1041"><option>En attente</option><option selected>Expédiée</option><option>Livrée</option><option>Annulée</option></select></td></tr>
+            <tr><td>#1040</td><td>30/09/2026</td><td>Léa Martin</td><td>203,90 €</td><td><select aria-label="Statut de la commande 1040"><option>En attente</option><option>Expédiée</option><option selected>Livrée</option><option>Annulée</option></select></td></tr>
+            <tr><td>#1039</td><td>29/09/2026</td><td>Hugo Petit</td><td>79,00 €</td><td><select aria-label="Statut de la commande 1039"><option>En attente</option><option>Expédiée</option><option>Livrée</option><option selected>Annulée</option></select></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>

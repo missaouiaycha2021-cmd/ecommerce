@@ -1,0 +1,65 @@
+/* ===== BASE (menu, titre de page, boutons, pied de page) ===== */
+:host {
+  --encre: #111; --os: #f4f0e9; --gris: #6b6b67; --ligne: #e8e4dc; --rouge: #b5472c;
+  display: block; font-family: 'Inter', Arial, sans-serif; color: var(--encre); background: #fff;
+}
+h1, h2, h3, .logo { font-family: 'Playfair Display', Georgia, serif; font-weight: 500; }
+a { text-decoration: none; color: inherit; }
+button { font: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--rouge); outline-offset: 3px; }
+
+.annonce { background: var(--encre); color: #fff; text-align: center; padding: 10px 20px; font-size: 13px; letter-spacing: .06em; }
+.header { display: flex; align-items: center; justify-content: space-between; padding: 22px 80px; border-bottom: 1px solid var(--ligne); }
+.logo { font-size: 28px; letter-spacing: .18em; }
+.menu { display: flex; gap: 36px; }
+.menu a { text-transform: uppercase; font-size: 13px; letter-spacing: .14em; padding-bottom: 4px; border-bottom: 2px solid transparent; }
+.menu a:hover, .menu a.actif { border-bottom-color: var(--encre); }
+.icones { display: flex; align-items: center; gap: 26px; }
+.compteur { display: flex; align-items: center; gap: 8px; color: var(--gris); font-size: 14px; }
+.compteur b { color: var(--encre); font-weight: 600; }
+
+.banniere { background: var(--os); text-align: center; padding: 80px 20px; }
+.banniere h1 { font-size: clamp(38px, 5vw, 60px); margin: 0 0 12px; }
+.fil { margin: 0; text-transform: uppercase; letter-spacing: .14em; font-size: 12px; color: var(--gris); }
+.fil a { color: var(--encre); border-bottom: 1px solid var(--encre); }
+
+.surtitre { text-transform: uppercase; letter-spacing: .24em; font-size: 12px; font-weight: 600; color: var(--rouge); margin: 0 0 16px; }
+.bouton { display: inline-block; background: var(--encre); color: #fff; border: 0; padding: 16px 36px; text-transform: uppercase; letter-spacing: .14em; font-size: 12px; font-weight: 600; transition: .2s; }
+.bouton:hover { background: var(--rouge); }
+
+.footer { background: var(--encre); color: #c9c9c5; padding: 70px 80px 0; }
+.colonnes { display: grid; grid-template-columns: 1.4fr 1fr 1.4fr; gap: 50px; padding-bottom: 50px; }
+.footer h3 { color: #fff; font-size: 24px; letter-spacing: .16em; margin: 0 0 14px; }
+.footer h4 { color: #fff; text-transform: uppercase; letter-spacing: .14em; font-size: 12px; margin: 0 0 18px; }
+.footer a { display: block; margin-bottom: 10px; }
+.footer a:hover { color: #fff; }
+.footer p { line-height: 1.7; margin: 0 0 14px; }
+.footer form { display: flex; border-bottom: 1px solid #666; margin-bottom: 14px; }
+.footer input { flex: 1; background: none; border: 0; color: #fff; padding: 10px 0; font: inherit; }
+.footer input:focus-visible { outline: none; }
+.footer form button { background: none; border: 0; color: #fff; font-weight: 600; }
+.mail { font-size: 14px; }
+.copyright { text-align: center; border-top: 1px solid #2c2f33; padding: 24px 0; margin: 0; font-size: 13px; }
+
+@media (max-width: 1000px) {
+  .header, .footer { padding-left: 24px; padding-right: 24px; }
+  .menu { display: none; }
+  .header { flex-wrap: wrap; gap: 14px; }
+  .colonnes { grid-template-columns: 1fr; }
+}
+
+/* ===== STYLE PROPRE À LA PAGE ===== */
+.services { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; padding: 90px 80px; }
+.services article { border: 1px solid var(--ligne); padding: 40px 32px; transition: .25s; }
+.services article:hover { border-color: var(--encre); transform: translateY(-4px); }
+.num { display: block; font-family: 'Playfair Display', Georgia, serif; font-size: 40px; color: var(--rouge); margin-bottom: 18px; }
+.services h3 { font-size: 24px; margin: 0 0 12px; }
+.services p { margin: 0; line-height: 1.75; color: var(--gris); }
+
+.appel { background: var(--encre); color: #fff; text-align: center; padding: 90px 20px; }
+.appel .surtitre { color: #e6bf8b; }
+.appel h2 { font-size: 38px; margin: 0 0 30px; }
+.appel .bouton { background: #fff; color: var(--encre); }
+.appel .bouton:hover { background: var(--rouge); color: #fff; }
+
+@media (max-width: 1000px) { .services { padding: 50px 24px; } }

@@ -1,0 +1,50 @@
+
+  <div class="adm">
+    <aside class="adm-nav">
+      <a href="#" class="adm-logo">E-shop</a>
+      <p class="adm-sous">Administration</p>
+      <nav aria-label="Administration">
+         <a routerLink="/admin/dashboard" routerLinkActive="actif">Tableau de bord</a>
+         <a routerLink="/admin/categories"  >Catégories</a>
+         <a routerLink="/admin/produits" >Produits</a>
+        <a routerLink="/admin/clients">Clients</a>
+        <a routerLink="/admin/commandes" >Commandes</a>
+      </nav>
+      <a href="connexion.html" class="adm-lien">Se déconnecter</a>
+    </aside>
+
+
+    <main class="adm-main">
+      <h1>Tableau de bord</h1>
+
+      <section class="adm-stats">
+        <div><span>Chiffre d'affaires</span><b>376,40 €</b></div>
+        <div><span>Commandes à traiter</span><b>1</b></div>
+        <div><span>Produits en ligne</span><b>7</b></div>
+        <div><span>Valeur du stock</span><b>5 342 €</b></div>
+      </section>
+
+      <h2>Stock à réapprovisionner</h2>
+      <div class="adm-defile">
+        <table class="adm-table">
+          <thead><tr><th>Produit</th><th>Catégorie</th><th>Stock</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>Manteau long</td><td>Femme</td><td class="alerte">4</td><td><a href="produit-form.html">Modifier</a></td></tr>
+            <tr><td>Veste en jean</td><td>Enfant</td><td class="alerte">3</td><td><a href="produit-form.html">Modifier</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Dernières commandes</h2>
+      <div class="adm-defile">
+        <table class="adm-table">
+          <thead><tr><th>N°</th><th>Client</th><th>Total</th><th>Statut</th></tr></thead>
+          <tbody>
+            <tr><td>#1042</td><td>Camille Durand</td><td>128,00 €</td><td><span class="statut attente">En attente</span></td></tr>
+            <tr><td>#1041</td><td>Yanis Benali</td><td>44,50 €</td><td><span class="statut expediee">Expédiée</span></td></tr>
+            <tr><td>#1040</td><td>Léa Martin</td><td>203,90 €</td><td><span class="statut livree">Livrée</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>

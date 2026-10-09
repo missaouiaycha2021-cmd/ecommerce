@@ -1,0 +1,54 @@
+
+  <div class="adm">
+    <aside class="adm-nav">
+      <a href="#" class="adm-logo">E-shop</a>
+      <p class="adm-sous">Administration</p>
+      <nav aria-label="Administration">
+         <a routerLink="/admin/dashboard" >Tableau de bord</a>
+         <a routerLink="/admin/categories"  >Catégories</a>
+         <a routerLink="/admin/produits" >Produits</a>
+        <a routerLink="/admin/clients"routerLinkActive="actif">Clients</a>
+        <a routerLink="/admin/commandes" >Commandes</a>
+      </nav>
+      <a href="connexion.html" class="adm-lien">Se déconnecter</a>
+    </aside>
+
+    <main class="adm-main">
+      <h1>Clients</h1>
+      <div class="adm-filtres">
+        <input type="search" placeholder="Rechercher par nom, e-mail ou ville" aria-label="Rechercher un client">
+      </div>
+      <div class="adm-defile">
+        <table class="adm-table">
+          <thead><tr><th>Client</th><th>Ville</th><th>Inscrit le</th><th>Commandes</th><th>Total dépensé</th><th>Statut</th><th></th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Camille Durand<br><small>camille.durand.com</small></td><td>Lyon</td><td>14/03/2026</td><td>1</td><td>128,00 €</td>
+              <td>Actif</td>
+              <td><a href="client-detail.html">Voir la fiche</a></td>
+            </tr>
+            <tr>
+              <td>Yanis Benali<br><small>yanis.benali.com</small></td><td>Marseille</td><td>02/05/2026</td><td>1</td><td>44,50 €</td>
+              <td>Actif</td>
+              <td><a href="client-detail.html">Voir la fiche</a></td>
+            </tr>
+            <tr>
+              <td>Léa Martin<br><small>lea.martin.com</small></td><td>Paris</td><td>20/01/2026</td><td>1</td><td>203,90 €</td>
+              <td>Actif</td>
+              <td><a href="client-detail.html">Voir la fiche</a></td>
+            </tr>
+            <tr>
+              <td>Hugo Petit<br><small>hugo.petit.com</small></td><td>Nantes</td><td>09/07/2026</td><td>1</td><td>0,00 €</td>
+              <td><b class="alerte">Bloqué</b></td>
+              <td><a href="client-detail.html">Voir la fiche</a></td>
+            </tr>
+            <tr>
+              <td>Sarah Lopez<br><small>sarah.lopez.com</small></td><td>Toulouse</td><td>18/09/2026</td><td>0</td><td>0,00 €</td>
+              <td>Actif</td>
+              <td><a href="client-detail.html">Voir la fiche</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>

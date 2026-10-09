@@ -1,0 +1,75 @@
+<div class="annonce">Livraison offerte dès 60 € · Retours gratuits sous 30 jours</div>
+
+<header class="header">
+  <a routerLink="/" class="logo">E-shop</a>
+
+  <nav class="menu">
+    <a routerLink="/" routerLinkActive="actif" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    <a routerLink="/about" routerLinkActive="actif">About</a>
+    <a routerLink="/services" routerLinkActive="actif">Services</a>
+    <a routerLink="/blog" routerLinkActive="actif">Blog</a>
+    <a routerLink="/contact" routerLinkActive="actif">Contact</a>
+  </nav>
+
+  <div class="icones">
+    <a href="#" aria-label="Rechercher">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.6"><circle cx="10" cy="10" r="7"/><path d="M15 15l6 6"/></svg>
+    </a>
+    <a href="#" class="compteur" aria-label="Favoris">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.6"><path d="M12 21C5 15 2 11.5 2 8a5 5 0 0 1 10-1 5 5 0 0 1 10 1c0 3.500-3 7-10 13z"/></svg>
+      <span>(05)</span>
+    </a>
+    <a href="#" class="compteur" aria-label="Panier">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.6"><path d="M5 8h14l-1 13H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+      <span>(02) <b>128,00 €</b></span>
+    </a>
+  </div>
+</header>
+
+<section class="banniere">
+  <h1>À propos</h1>
+  <p class="fil"><a routerLink="/">Home</a> / About</p>
+</section>
+
+<section class="histoire">
+  <div class="image"></div>
+  <div class="texte">
+    <p class="surtitre">Notre histoire</p>
+    <h2>Une mode simple, pensée pour durer</h2>
+    <p>ATELIER 21 est née d'une idée : proposer des vêtements intemporels, confortables et bien coupés, sans suivre la mode éphémère.</p>
+    <p>Nous sélectionnons des matières naturelles comme le coton, le lin et la laine, et travaillons avec des ateliers que nous connaissons personnellement.</p>
+    <a routerLink="/shop" class="bouton">Découvrir la collection</a>
+  </div>
+</section>
+
+<section class="valeurs">
+  <h2>Nos engagements</h2>
+  <div class="trois">
+    <div><h3>Qualité</h3><p>Des coutures solides et des matières choisies pour résister aux lavages.</p></div>
+    <div><h3>Éthique</h3><p>Des ateliers partenaires, des conditions de travail respectées.</p></div>
+    <div><h3>Durabilité</h3><p>Peu de pièces, mais des pièces qui se portent des années.</p></div>
+  </div>
+</section>
+
+<section class="chiffres">
+  <div><strong>10 ans</strong><p>d'expérience</p></div>
+  <div><strong>25 000+</strong><p>clients satisfaits</p></div>
+  <div><strong>240</strong><p>modèles en boutique</p></div>
+  <div><strong>98 %</strong><p>d'avis positifs</p></div>
+</section>
+
+<footer class="footer">
+  <div class="colonnes">
+    <div><h3>ATELIER 21</h3><p>Mode pour toute la famille, pensée pour durer.</p></div>
+    <div><h4>Aide</h4><a routerLink="/services">Livraison</a><a routerLink="/services">Retours</a><a routerLink="/contact">Nous contacter</a></div>
+    <div>
+      <h4>Newsletter</h4>
+      <form (submit)="$event.preventDefault()">
+        <input type="email" placeholder="Votre e-mail" aria-label="Adresse e-mail" required>
+        <button type="submit">OK</button>
+      </form>
+      <p class="mail">contact&#64;atelier21.example</p>
+    </div>
+  </div>
+  <p class="copyright">© 2026 ATELIER 21. Tous droits réservés.</p>
+</footer>

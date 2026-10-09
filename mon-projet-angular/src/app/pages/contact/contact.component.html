@@ -1,0 +1,79 @@
+<div class="annonce">Livraison offerte dès 60 € · Retours gratuits sous 30 jours</div>
+
+<header class="header">
+  <a routerLink="/" class="logo">ATELIER 21</a>
+
+  <nav class="menu">
+    <a routerLink="/" routerLinkActive="actif" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    <a routerLink="/about" routerLinkActive="actif">About</a>
+    <a routerLink="/services" routerLinkActive="actif">Services</a>
+    <a routerLink="/blog" routerLinkActive="actif">Blog</a>
+    <a routerLink="/contact" routerLinkActive="actif">Contact</a>
+  </nav>
+
+  <div class="icones">
+    <a href="#" aria-label="Rechercher">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.6"><circle cx="10" cy="10" r="7"/><path d="M15 15l6 6"/></svg>
+    </a>
+    <a href="#" class="compteur" aria-label="Favoris">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.6"><path d="M12 21C5 15 2 11.5 2 8a5 5 0 0 1 10-1 5 5 0 0 1 10 1c0 3.500-3 7-10 13z"/></svg>
+      <span>(05)</span>
+    </a>
+    <a href="#" class="compteur" aria-label="Panier">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.6"><path d="M5 8h14l-1 13H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+      <span>(02) <b>128,00 €</b></span>
+    </a>
+  </div>
+</header>
+
+<section class="banniere">
+  <h1>Contact</h1>
+  <p class="fil"><a routerLink="/">Home</a> / Contact</p>
+</section>
+
+<section class="contact">
+
+  <div class="infos">
+    <p class="surtitre">Parlons-en</p>
+    <h2>Une question sur une commande ?</h2>
+    <p class="intro">Écrivez-nous, nous répondons sous 24 h, du lundi au samedi.</p>
+
+    <div class="bloc"><h3>Adresse</h3><p>69 North Cleveland Street<br>Memphis, USA</p></div>
+    <div class="bloc"><h3>Téléphone</h3><p>(123) 8111 9210</p></div>
+    <div class="bloc"><h3>E-mail</h3><p>contact&#64;atelier21.example</p></div>
+    <div class="bloc"><h3>Horaires</h3><p>Lundi – Samedi : 9h – 19h</p></div>
+  </div>
+
+  <form class="formulaire" (submit)="$event.preventDefault()">
+    <label for="nom">Nom</label>
+    <input id="nom" type="text" required maxlength="80">
+
+    <label for="email">E-mail</label>
+    <input id="email" type="email" required maxlength="120">
+
+    <label for="sujet">Sujet</label>
+    <input id="sujet" type="text" required maxlength="120">
+
+    <label for="message">Message</label>
+    <textarea id="message" rows="6" required maxlength="2000"></textarea>
+
+    <button type="submit" class="bouton">Envoyer le message</button>
+  </form>
+
+</section>
+
+<footer class="footer">
+  <div class="colonnes">
+    <div><h3>ATELIER 21</h3><p>Mode pour toute la famille, pensée pour durer.</p></div>
+    <div><h4>Aide</h4><a routerLink="/services">Livraison</a><a routerLink="/services">Retours</a><a routerLink="/contact">Nous contacter</a></div>
+    <div>
+      <h4>Newsletter</h4>
+      <form (submit)="$event.preventDefault()">
+        <input type="email" placeholder="Votre e-mail" aria-label="Adresse e-mail" required>
+        <button type="submit">OK</button>
+      </form>
+      <p class="mail">contact&#64;atelier21.example</p>
+    </div>
+  </div>
+  <p class="copyright">© 2026 ATELIER 21. Tous droits réservés.</p>
+</footer>
