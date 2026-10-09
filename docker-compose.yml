@@ -1,0 +1,35 @@
+#désigne les différents services que Docker Compose doit gérer db,backend et frontend
+services:
+#service bd
+  db:
+  #Docker utilise l'image PostgreSQL version 16 pour créer le conteneur de base de données
+    image: postgres:16
+    environment:
+      POSTGRES_DB: mydb #Le nom de la base de données à créer lors de l'initialisation.
+      POSTGRES_USER: myuser #Le nom de l'utilisateur PostgreSQL à créer.
+      POSTGRES_PASSWORD: mypass #Le mot de passe de cet utilisateur.
+    ports:
+      - "5432:5432" #Cette configuration permet de connecter le port PostgreSQL du conteneur au port de ta machine. "PORT_MACHINE:PORT_CONTENEUR"
+    volumes:
+      - pgdata:/var/lib/postgresql/data #Elle permet de lier un volume Docker au dossier où PostgreSQL stocke ses données.
+#service backend
+  backend:
+    build: ./api #indique à Docker de construire une image à partir du dossier api
+    ports:
+      - "8080:8080" #La syntaxe est PORT_MACHINE:PORT_CONTENEUR
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/mydb
+      SPRING_DATASOURCE_USERNAME: myuser
+      SPRING_DATASOURCE_PASSWORD: mypass
+    depends_on: #Cela indique à Docker Compose de démarrer le service db avant le service backend.
+      - db
+#service frontend
+  frontend:
+    build: ./mon-projet-angular
+    ports:
+      - "4200:80"
+    depends_on: #Cela indique à Docker Compose de démarrer le service backend avant le service frontend.
+      - backend 
+
+volumes: #déclare un volume Docker nommé pgdata pour conserver les données de PostgreSQL
+  pgdata:
