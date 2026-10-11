@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import com.projet.api.entities.Categorie;
 import com.projet.api.service.CategorieService;
 
+@CrossOrigin(origins = "http://localhost:8080")
 @RestController
 @RequestMapping("/api/categories")
 public class CategorieController {
