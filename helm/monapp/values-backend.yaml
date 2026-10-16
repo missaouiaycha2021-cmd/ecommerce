@@ -1,0 +1,22 @@
+nameOverride: "backend"
+fullnameOverride: "backend"
+replicaCount: 1
+containerPort: 8080
+image:
+  repository: aycha123/ecommerce-backend
+  tag: "1.0"
+service:
+  port: 8080
+env:
+  - name: SPRING_DATASOURCE_URL
+    value: jdbc:postgresql://db:5432/mydb
+  - name: SPRING_DATASOURCE_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: db-secret
+        key: POSTGRES_USER
+  - name: SPRING_DATASOURCE_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: db-secret
+        key: POSTGRES_PASSWORD
