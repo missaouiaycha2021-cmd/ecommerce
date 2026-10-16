@@ -7,3 +7,13 @@ image:
   tag: "1.0"
 service:
   port: 80
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 30
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 15
