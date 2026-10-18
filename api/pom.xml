@@ -27,6 +27,8 @@
 		<url/>
 	</scm>
 	<properties>
+		<tomcat.version>11.0.26</tomcat.version>
+		<postgresql.version>42.7.14</postgresql.version>
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
