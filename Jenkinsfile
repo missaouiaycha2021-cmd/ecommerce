@@ -98,7 +98,7 @@ pipeline {
                 dir("${BACKEND_DIR}") {
                     withSonarQubeEnv('sonarqube') {
                         sh """
-                            mvn -B sonar:sonar \
+                            mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
                               -Dsonar.projectKey=${SONAR_PROJECT} \
                               -Dsonar.projectName=${SONAR_PROJECT}
                         """
