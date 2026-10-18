@@ -1,22 +1,12 @@
 nameOverride: "frontend"
 fullnameOverride: "frontend"
 replicaCount: 1
-containerPort: 80
+containerPort: 8080
 image:
   repository: aycha123/ecommerce-frontend
   tag: "3.0"
 service:
   port: 80
-livenessProbe:
-  httpGet:
-    path: /
-    port: http
-  initialDelaySeconds: 30
-readinessProbe:
-  httpGet:
-    path: /
-    port: http
-  initialDelaySeconds: 15
 livenessProbe:
   httpGet:
     path: /

@@ -10,8 +10,8 @@ pipeline {
         DOCKERHUB_USER = 'aycha123'
         BACKEND_IMAGE  = 'aycha123/ecommerce-backend'
         FRONTEND_IMAGE = 'aycha123/ecommerce-frontend'
-        BACKEND_DIR    = 'backend'    // adaptez si vos dossiers ont un autre nom
-        FRONTEND_DIR   = 'frontend'
+        BACKEND_DIR    = 'api'                   // Spring Boot (pom.xml)
+        FRONTEND_DIR   = 'mon-projet-angular'   // Angular (package.json)
         SONAR_PROJECT  = 'mon-projet-api'
         SNYK_TOKEN     = credentials('snyk-token')
 

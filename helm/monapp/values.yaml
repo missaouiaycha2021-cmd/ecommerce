@@ -139,3 +139,6 @@ tolerations: []
 
 affinity: {}
 env: []
+
+route:
+  enabled: false

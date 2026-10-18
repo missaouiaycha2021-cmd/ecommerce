@@ -22,7 +22,7 @@ RUN npm run build
 # Étape 2 : serveur nginx
 #permet à Docker d'utiliser une image légère alpine contenant Nginx ces un serveur web qui servira les fichiers HTML, JavaScript et CSS de l'application Angular aux utilisateurs après le déploiement.
 #Nginx est un serveur web.Il sert à envoyer les fichiers de ton application Angular au navigateur pour que l'utilisateur puisse voir le site.
-FROM nginx:alpine
+FROM nginxinc/nginx-unprivileged:alpine
 
 #copie le fichier nginx.conf de ton projet vers l'emplacement où Nginx lit sa configuration dans le conteneur Docker
 #Le fichier nginx.conf contient les règles qui expliquent à Nginx comment afficher ton application Angular.
@@ -31,5 +31,5 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist/mon-projet-angular/browser /usr/share/nginx/html
 #Cette ligne indique que ton application utilise le port 80 pour communiquer avec les visiteurs.
 #le port utilisé par Nginx à l'intérieur du conteneur Docker
-EXPOSE 80
+EXPOSE 8080
 #On n'ajoute pas forcément CMD ou ENTRYPOINT dans ton Dockerfile Angular parce que l'image Nginx utilisée avec FROM nginx:alpine possède déjà une commande pour démarrer le serveur web.
