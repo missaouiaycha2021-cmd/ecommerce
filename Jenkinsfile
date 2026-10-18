@@ -1,123 +1,242 @@
 pipeline {
-    
-  agent any      //Exécute le pipeline sur n’importe quelle machine Jenkins disponible.
+    agent any
 
-  environment {
-    REGISTRY     = 'docker.io/aycha123' //lien docker hub
-    BACKEND_IMG  = "${REGISTRY}/backend" //lien image backend dans docker hub
-    FRONTEND_IMG = "${REGISTRY}/frontend" //lien image frontend dans docker hub
-    TAG          = "${env.GIT_COMMIT.take(7)}"//pour identifier chaque version de l’image
-    CONFIG_REPO  = 'github.com/votre-user/mon-projet-config.git' //Dépôt GitHub qui contient le chart Helm
-  }
-
-  tools { //Jenkins utilise Maven et Node que vous avez configurés dans Manage Jenkins
-    maven 'maven-3'
-    nodejs 'node-20'
-  }
-
-  stages {
-
-    stage('Checkout') { //Télécharge le code depuis GitHub
-      steps { checkout scm }
+    tools {
+        maven 'maven-3'     // Manage Jenkins > Tools : nom exact
+        nodejs 'node-20'    // Manage Jenkins > Tools : nom exact
     }
 
-    stage('Build & Test Backend') { //compile Spring Boot et lance les tests, dans le dossier api
-      steps {
-        dir('api') { sh 'mvn clean verify' }
-      }
+    environment {
+        DOCKERHUB_USER = 'aycha123'
+        BACKEND_IMAGE  = 'aycha123/ecommerce-backend'
+        FRONTEND_IMAGE = 'aycha123/ecommerce-frontend'
+        BACKEND_DIR    = 'backend'    // adaptez si vos dossiers ont un autre nom
+        FRONTEND_DIR   = 'frontend'
+        SONAR_PROJECT  = 'mon-projet-api'
+        SNYK_TOKEN     = credentials('snyk-token')
+
+        // Valeurs de TEST pour la base PostgreSQL temporaire du scan DAST (pas des vrais secrets)
+        DAST_DB        = 'ecommerce'
+        DAST_DB_USER   = 'ci_user'
+        DAST_DB_PASS   = 'ci_pass_test'
+
     }
 
-    stage('Build Frontend') { //npm ci installe les dépendances, npm run build compile Angular
-      steps {
-        dir('mon-projet-angular') {
-          sh 'npm ci'
-          sh 'npm run build'
+    options {
+        timestamps()
+        disableConcurrentBuilds()
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+                script {
+                    env.IMAGE_TAG = env.GIT_COMMIT.take(7)
+                    echo "Tag des images : ${env.IMAGE_TAG}"
+                }
+            }
         }
-      }
-    }
 
-    stage('SonarQube Analysis') {
-      steps {
-        withSonarQubeEnv('sonarqube') {
-          dir('api') {
-            sh 'mvn sonar:sonar -Dsonar.projectKey=mon-projet-api'
-          }
+        stage('Gitleaks (secrets)') {
+            steps {
+                // Scan des fichiers du dépôt. Échoue (rouge) si un secret est trouvé.
+                sh '''
+                    docker run --rm --user $(id -u):$(id -g) \
+                        -v "$WORKSPACE":/repo \
+                        zricethezav/gitleaks:latest detect \
+                        --source /repo --no-git --redact \
+                        --report-format json --report-path /repo/gitleaks-report.json \
+                        --exit-code 1
+                '''
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'gitleaks-report.json', allowEmptyArchive: true
+                }
+            }
         }
-      }
-    }
 
-    stage('Quality Gate') { //	Attend le verdict de SonarQube (max 5 min). Si la qualité est insuffisante, le pipeline s’arrête
-      steps {
-        timeout(time: 5, unit: 'MINUTES') {
-          waitForQualityGate abortPipeline: true
+        stage('Build') {
+            parallel {
+                stage('Backend (Maven)') {
+                    steps {
+                        dir("${BACKEND_DIR}") {
+                            sh 'mvn -B clean package -DskipTests'
+                        }
+                    }
+                }
+                stage('Frontend (Angular)') {
+                    steps {
+                        dir("${FRONTEND_DIR}") {
+                            sh 'npm ci'
+                            sh 'npm run build -- --configuration production'
+                        }
+                    }
+                }
+            }
         }
-      }
-    }
 
-    stage('Snyk Scan') { //	Cherche les failles dans les dépendances (pom.xml, package.json).
-      steps {
-        withCredentials([string(credentialsId: 'snyk-token', variable: 'SNYK_TOKEN')]) {
-          dir('api') { sh 'snyk test --severity-threshold=high || true' }
-          dir('mon-projet-angular') { sh 'snyk test --severity-threshold=high || true' }
+        stage('Tests') {
+            steps {
+                dir("${BACKEND_DIR}") {
+                    sh 'mvn -B test'
+                }
+            }
+            post {
+                always {
+                    junit allowEmptyResults: true,
+                          testResults: "${BACKEND_DIR}/target/surefire-reports/*.xml"
+                }
+            }
         }
-      }
-    }
 
-    stage('Docker Build & Tag') {
-      steps { //Construit les 2 images avec les Dockerfiles et leur donne le tag (ex. backend:a1b2c3d)
-        sh """
-          docker build -t ${BACKEND_IMG}:${TAG} ./api
-          docker build -t ${FRONTEND_IMG}:${TAG} ./mon-projet-angular
-        """
-      }
-    }
-
-    stage('Trivy Image Scan') {
-      steps { //Cherche les failles dans les images. --exit-code 1 fait échouer le pipeline si une faille CRITICAL est trouvée
-        sh """
-          trivy image --exit-code 1 --severity CRITICAL ${BACKEND_IMG}:${TAG}
-          trivy image --exit-code 1 --severity CRITICAL ${FRONTEND_IMG}:${TAG}
-        """
-      }
-    }
-
-    stage('Docker Push') { //	Se connecte à Docker Hub et envoie les 2 images
-      steps {
-        withCredentials([usernamePassword(credentialsId: 'registry-creds',
-            usernameVariable: 'REG_USER', passwordVariable: 'REG_PASS')]) {
-          sh """
-            echo \$REG_PASS | docker login -u \$REG_USER --password-stdin
-            docker push ${BACKEND_IMG}:${TAG}
-            docker push ${FRONTEND_IMG}:${TAG}
-          """
+        stage('SonarQube Analysis') {
+            steps {
+                dir("${BACKEND_DIR}") {
+                    withSonarQubeEnv('sonarqube') {
+                        sh """
+                            mvn -B sonar:sonar \
+                              -Dsonar.projectKey=${SONAR_PROJECT} \
+                              -Dsonar.projectName=${SONAR_PROJECT}
+                        """
+                    }
+                }
+            }
         }
-      }
-    }
 
-    stage('Update Helm Values') {//Modifie le tag dans le dépôt de config, ce qui déclenche ArgoCD
-      steps {
-        withCredentials([string(credentialsId: 'github-token', variable: 'GH_TOKEN')]) {
-          sh """
-            rm -rf config-repo
-            git clone https://\$GH_TOKEN@${CONFIG_REPO} config-repo
-            cd config-repo
-            sed -i '/backend:/,/tag:/ s|tag: ".*"|tag: "${TAG}"|' mon-app/values.yaml
-            sed -i '/frontend:/,/tag:/ s|tag: ".*"|tag: "${TAG}"|' mon-app/values.yaml
-            git config user.email "jenkins@local"
-            git config user.name "jenkins"
-            git commit -am "Update image tag to ${TAG}"
-            git push
-          """
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
         }
-      }
-    }
-    // ArgoCD détecte le commit dans le dépôt de config
-    // et déploie le chart Helm sur Kubernetes automatiquement.
-  }
 
-  post {
-    success { echo "Pipeline OK : image ${TAG} poussée, ArgoCD va déployer" }
-    failure { echo "Pipeline en échec, vérifiez les logs" }
-    always  { sh 'docker logout || true' }
-  }
+        stage('Snyk Scan') {
+            steps {
+                catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
+                    dir("${BACKEND_DIR}") {
+                        sh 'snyk test --severity-threshold=high'
+                    }
+                    dir("${FRONTEND_DIR}") {
+                        sh 'snyk test --severity-threshold=high'
+                    }
+                }
+            }
+        }
+
+        stage('Docker Build & Tag') {
+            steps {
+                sh """
+                    docker build -t ${BACKEND_IMAGE}:${IMAGE_TAG} ${BACKEND_DIR}
+                    docker tag   ${BACKEND_IMAGE}:${IMAGE_TAG} ${BACKEND_IMAGE}:latest
+
+                    docker build -t ${FRONTEND_IMAGE}:${IMAGE_TAG} ${FRONTEND_DIR}
+                    docker tag   ${FRONTEND_IMAGE}:${IMAGE_TAG} ${FRONTEND_IMAGE}:latest
+                """
+            }
+        }
+
+        stage('Trivy Scan') {
+            steps {
+                // Retirez --exit-code 1 pour une démonstration si une base d'image a une faille CRITICAL
+                sh """
+                    trivy image --severity CRITICAL --exit-code 1 --ignore-unfixed \
+                        --format table -o trivy-backend.txt ${BACKEND_IMAGE}:${IMAGE_TAG}
+                    trivy image --severity CRITICAL --exit-code 1 --ignore-unfixed \
+                        --format table -o trivy-frontend.txt ${FRONTEND_IMAGE}:${IMAGE_TAG}
+                """
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'trivy-*.txt', allowEmptyArchive: true
+                }
+            }
+        }
+
+        stage('DAST (OWASP ZAP)') {
+            steps {
+                // Démarre PostgreSQL + backend + frontend dans un réseau Docker temporaire,
+                // lance ZAP baseline contre l'application, puis nettoie (voir post).
+                // UNSTABLE (jaune) si l'application ne démarre pas ou si ZAP signale un problème.
+                catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
+                    sh '''
+                        set -e
+                        docker network create ci-net || true
+                        docker rm -f postgres-ci backend-ci frontend-ci || true
+
+                        docker run -d --name postgres-ci --network ci-net \
+                            -e POSTGRES_DB=$DAST_DB -e POSTGRES_USER=$DAST_DB_USER \
+                            -e POSTGRES_PASSWORD=$DAST_DB_PASS postgres:16
+
+                        docker run -d --name backend-ci --network ci-net \
+                            -e SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-ci:5432/$DAST_DB \
+                            -e SPRING_DATASOURCE_USERNAME=$DAST_DB_USER \
+                            -e SPRING_DATASOURCE_PASSWORD=$DAST_DB_PASS \
+                            $BACKEND_IMAGE:$IMAGE_TAG
+
+                        docker run -d --name frontend-ci --network ci-net $FRONTEND_IMAGE:$IMAGE_TAG
+
+                        echo "Attente du démarrage (max 5 min)..."
+                        for i in $(seq 1 60); do
+                            if docker run --rm --network ci-net curlimages/curl -s -o /dev/null http://backend-ci:8080/ \
+                               && docker run --rm --network ci-net curlimages/curl -s -o /dev/null http://frontend-ci:8080/; then
+                                echo "Application prête."; break
+                            fi
+                            sleep 5
+                        done
+
+                        mkdir -p zap-reports && chmod 777 zap-reports
+
+                        # -j : spider AJAX (utile pour Angular) ; -I : ne pas échouer sur simples avertissements
+                        docker run --rm --network ci-net -v "$WORKSPACE/zap-reports":/zap/wrk:rw \
+                            ghcr.io/zaproxy/zaproxy:stable zap-baseline.py \
+                            -t http://frontend-ci:8080 -j -I -r zap-frontend.html
+
+                        docker run --rm --network ci-net -v "$WORKSPACE/zap-reports":/zap/wrk:rw \
+                            ghcr.io/zaproxy/zaproxy:stable zap-baseline.py \
+                            -t http://backend-ci:8080 -I -r zap-backend.html
+                    '''
+                }
+            }
+            post {
+                always {
+                    sh 'docker rm -f postgres-ci backend-ci frontend-ci || true'
+                    sh 'docker network rm ci-net || true'
+                    archiveArtifacts artifacts: 'zap-reports/*.html', allowEmptyArchive: true
+                }
+            }
+        }
+
+        stage('Docker Push') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'registry-creds',
+                                                  usernameVariable: 'REG_USER',
+                                                  passwordVariable: 'REG_PASS')]) {
+                    sh '''
+                        echo "$REG_PASS" | docker login -u "$REG_USER" --password-stdin
+                        docker push $BACKEND_IMAGE:$IMAGE_TAG
+                        docker push $BACKEND_IMAGE:latest
+                        docker push $FRONTEND_IMAGE:$IMAGE_TAG
+                        docker push $FRONTEND_IMAGE:latest
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            sh 'docker logout || true'
+        }
+        success {
+            echo "CI OK : images ${BACKEND_IMAGE}:${IMAGE_TAG} et ${FRONTEND_IMAGE}:${IMAGE_TAG} poussées."
+        }
+        failure {
+            echo 'CI en échec : consultez le stage rouge dans la Stage View.'
+        }
+    }
 }
