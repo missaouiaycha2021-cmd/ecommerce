@@ -175,7 +175,7 @@ pipeline {
                             -e POSTGRES_DB=$DAST_DB -e POSTGRES_USER=$DAST_DB_USER \
                             -e POSTGRES_PASSWORD=$DAST_DB_PASS postgres:16
 
-                        docker run -d --name backend-ci --network ci-net \
+                        docker run -d --name backend-ci --network ci-net -e SERVER_PORT=8080 \
                             -e SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-ci:5432/$DAST_DB \
                             -e SPRING_DATASOURCE_USERNAME=$DAST_DB_USER \
                             -e SPRING_DATASOURCE_PASSWORD=$DAST_DB_PASS \
